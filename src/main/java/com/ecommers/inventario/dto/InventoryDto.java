@@ -7,8 +7,11 @@ public class InventoryDto {
 
     public record InventoryRequest(
             Long id,
-            @NotNull Long productId,
-            @NotNull @Min(1) Integer quantity) {
+            @NotNull
+            Long productId,
+            @NotNull
+            @Min(1)
+            Integer quantity) {
     }
 
     public record InventoryResponse(
