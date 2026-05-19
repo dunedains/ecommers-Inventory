@@ -1,5 +1,6 @@
 package com.ecommers.inventario.service.Impl;
 
+import com.ecommers.inventario.client.ProductoClient;
 import com.ecommers.inventario.dto.InventoryDto.InventoryRequest;
 import com.ecommers.inventario.dto.InventoryDto.InventoryResponse;
 
@@ -9,15 +10,20 @@ import com.ecommers.inventario.service.InventoryService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
 
     private final InventoryRepository repository;
+    private final ProductoClient productoClient;
 
     @Override
+    @Transactional
     public InventoryResponse addStock(InventoryRequest request) {
+        productoClient.getProductoById(request.productId());
+
         Inventory inventory = repository.findByProductId(request.productId())
                 .orElseGet(() -> {
                     Inventory newInv = new Inventory();
@@ -32,6 +38,7 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
+    @Transactional
     public InventoryResponse reduceStock(InventoryRequest request) {
 
         Inventory inventory = repository.findByProductId(request.productId())
@@ -48,6 +55,7 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public InventoryResponse checkStock(Long productId) {
         Inventory inventory = repository.findByProductId(productId)
                 .orElseThrow(() -> new EntityNotFoundException(

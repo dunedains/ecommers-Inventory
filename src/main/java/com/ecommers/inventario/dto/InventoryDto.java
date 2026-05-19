@@ -2,6 +2,7 @@ package com.ecommers.inventario.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 public class InventoryDto {
 
@@ -18,5 +19,12 @@ public class InventoryDto {
             Long id,
             Long productId,
             Integer quantity) {
+    }
+
+    public record ProductoResponse(
+            Long id,
+            String nombre,
+            String descripcion,
+            BigDecimal precio) {
     }
 }
