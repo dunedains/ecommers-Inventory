@@ -1,9 +1,8 @@
 package com.ecommers.inventario.service.Impl;
 
-import com.ecommers.inventario.client.ProductoClient;
+import com.ecommers.inventario.client.ProductClient;
 import com.ecommers.inventario.dto.InventoryDto.InventoryRequest;
 import com.ecommers.inventario.dto.InventoryDto.InventoryResponse;
-
 import com.ecommers.inventario.model.Inventory;
 import com.ecommers.inventario.repository.InventoryRepository;
 import com.ecommers.inventario.service.InventoryService;
@@ -17,12 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class InventoryServiceImpl implements InventoryService {
 
     private final InventoryRepository repository;
-    private final ProductoClient productoClient;
+    private final ProductClient productClient;
 
     @Override
     @Transactional
     public InventoryResponse addStock(InventoryRequest request) {
-        productoClient.getProductoById(request.productId());
+        productClient.getProductById(request.productId());
 
         Inventory inventory = repository.findByProductId(request.productId())
                 .orElseGet(() -> {
@@ -40,13 +39,12 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     @Transactional
     public InventoryResponse reduceStock(InventoryRequest request) {
-
         Inventory inventory = repository.findByProductId(request.productId())
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No hay registro de inventario para el producto " + request.productId()));
+                        "No inventory record for product " + request.productId()));
 
         if (inventory.getQuantity() < request.quantity()) {
-            throw new IllegalArgumentException("Stock insuficiente. Disponible: " + inventory.getQuantity());
+            throw new IllegalArgumentException("Insufficient stock. Available: " + inventory.getQuantity());
         }
 
         inventory.setQuantity(inventory.getQuantity() - request.quantity());
@@ -59,7 +57,7 @@ public class InventoryServiceImpl implements InventoryService {
     public InventoryResponse checkStock(Long productId) {
         Inventory inventory = repository.findByProductId(productId)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "No hay inventario registrado para el producto " + productId));
+                        "No inventory registered for product " + productId));
 
         return new InventoryResponse(inventory.getId(), inventory.getProductId(), inventory.getQuantity());
     }

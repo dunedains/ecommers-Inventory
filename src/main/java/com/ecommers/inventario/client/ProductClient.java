@@ -1,13 +1,13 @@
 package com.ecommers.inventario.client;
 
-import com.ecommers.inventario.dto.InventoryDto.ProductoResponse;
+import com.ecommers.inventario.dto.InventoryDto.ProductResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "producto-service", url = "${feign.client.producto-url}")
-public interface ProductoClient {
+@FeignClient(name = "product-service", url = "${feign.client.product-url}")
+public interface ProductClient {
 
     @GetMapping("/api/productos/{id}")
-    ProductoResponse getProductoById(@PathVariable Long id);
+    ProductResponse getProductById(@PathVariable Long id);
 }

@@ -21,10 +21,10 @@ public class InventoryDto {
             Integer quantity) {
     }
 
-    public record ProductoResponse(
+    public record ProductResponse(
             Long id,
-            String nombre,
-            String descripcion,
-            BigDecimal precio) {
+            String name,
+            String description,
+            BigDecimal price) {
     }
 }
